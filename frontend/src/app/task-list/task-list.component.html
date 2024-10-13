@@ -1,0 +1,86 @@
+<div class="task-container">
+  <div class="task-header">
+    <div class="task-title">
+      <i class="fa fa-tasks"></i>
+      <div>
+        <pre>Tasks <br> All Task</pre>
+      </div>
+    </div>
+    <div class="task-buttons">
+      <button class="btn new-task" (click)="addNewTask()">New Task</button>
+      <button class="btn refresh" (click)="refreshTaskList()">Refresh</button>
+      <input type="text" placeholder="Search" class="search-bar" />
+      <app-new-task
+        (cancel)="toggleNewTaskComponentVisibility()"
+        *ngIf="isNewTaskVisible"
+        [users]="users"
+        (save)="toggleNewTaskComponentVisibility(); refreshTaskList()"
+      ></app-new-task>
+    </div>
+  </div>
+
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox" /></th>
+        <th>Assigned To</th>
+        <th>Status</th>
+        <th>Due Date</th>
+        <th>Priority</th>
+        <th>Comments</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks; let i = index">
+        <td><input type="checkbox" /></td>
+        <td>
+          <a href="#">{{ task.assignedTo }}</a>
+        </td>
+        <td>{{ task.status }}</td>
+        <td>{{ setDate(task.dueDate) }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.description }}</td>
+        <td>
+          <div class="dropdown">
+            <button class="dropdown-button">▾</button>
+            <div class="dropdown-content">
+              <a (click)="editTask(task)">Edit</a>
+              <a (click)="deleteTask(task)">Delete</a>
+            </div>
+          </div>
+        </td>
+        <app-edit-task
+          (cancel)="toggleEditTaskComponentVisibility()"
+          *ngIf="isEditTaskVisible"
+          [task]="selectedtask"
+          [users]="users"
+        ></app-edit-task>
+        <app-delete-task
+          (cancel)="toggleDeleteTaskComponentVisibility()"
+          *ngIf="isDeleteTaskVisible"
+          [task]="selectedtask"
+          (delete)="toggleDeleteTaskComponentVisibility()"
+        ></app-delete-task>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <div>
+      <label for="records">Records per page:</label>
+      <select id="records">
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+    <div class="pagination-controls">
+      <button>First</button>
+      <button>Prev</button>
+      <span>1</span>
+      <button>Next</button>
+      <button>Last</button>
+    </div>
+  </div>
+</div>
